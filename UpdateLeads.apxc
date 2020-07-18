@@ -1,0 +1,26 @@
+global class UpdateLeads implements Database.Batchable<sObject> {
+    
+    global Integer leadsProcessed=0;
+    
+    global Database.QueryLocator start(Database.BatchableContext bc){
+        return Database.getQueryLocator('Select Id, LeadSource, Rating from Lead where Country = \'US\' AND City = \'New York\' ');
+    }
+    
+    global void execute(Database.BatchableContext bc, List<Lead> new_ld){
+        List<Lead> leads=new List<Lead>();
+        for(Lead ld : new_ld){
+            ld.LeadSource = 'Web';
+            ld.Rating = 'Hot';
+            
+            leadsProcessed = leadsProcessed+1;
+            leads.add(ld);
+        }
+        
+        update leads;
+    }
+
+    
+    global void finish(Database.BatchableContext bc){
+        System.debug(''+leadsProcessed);
+    }
+}
