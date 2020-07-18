@@ -1,0 +1,29 @@
+@isTest
+
+private class UpdateLeadsTest {
+
+   @testSetup
+    static void setup(){
+        List<Lead> ld=new List<Lead>();
+        
+        for(Integer i=0;i<200;i++){
+            Lead lead=new Lead();
+            lead.LastName='Name' +i;
+            lead.Company='My Company';
+            lead.Country='US';
+            Lead.City='New York';
+            ld.add(lead);
+        }
+        insert ld;
+    }
+    
+    
+	 @isTest
+    static void testLeadUpdate(){
+        Test.startTest();
+        UpdateLeads lp=new UpdateLeads();
+        Id batchId= Database.executeBatch(lp);
+        Test.stopTest();
+    }
+    
+}
